@@ -1,5 +1,10 @@
 package com.abhinav.electronic.Repositories;
 
-public class UserRepo {
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.abhinav.electronic.Entities.User;
+
+public interface UserRepo extends JpaRepository<User, String>
+{
+  
 }
