@@ -18,6 +18,8 @@ import com.abhinav.electronic.Dto.ApiResponseMessage;
 import com.abhinav.electronic.Dto.UserDto;
 import com.abhinav.electronic.Service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -27,8 +29,8 @@ public class UserController {
 	
 	//create
 	@PostMapping
-	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto)
-	{
+	public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto)
+	{ 
 		UserDto created = this.userService.createUser(userDto);
 	    return new ResponseEntity<>(created,HttpStatus.CREATED);
 		
@@ -36,7 +38,7 @@ public class UserController {
 	
 	//update
 	@PutMapping("/{userId}")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable String userId)
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable String userId)
 	{
 		UserDto update = this.userService.updateUser(userDto, userId);
 		return new ResponseEntity<>(update,HttpStatus.ACCEPTED);
