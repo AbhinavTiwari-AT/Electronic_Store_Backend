@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.abhinav.electronic.Dto.UserDto;
 import com.abhinav.electronic.Entities.User;
+import com.abhinav.electronic.Exception.ResourceNotFoundException;
 import com.abhinav.electronic.Repositories.UserRepo;
 import com.abhinav.electronic.Service.UserService;
 
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto updateUser(UserDto userDto, String userId) {
 
-		User user = this.userRepo.findById(userId).orElseThrow(()-> new RuntimeException("ID not found"));
+		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","userId",userId));
          user.setName(userDto.getName());
          user.setAbout(userDto.getAbout());
          user.setGender(userDto.getGender());
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUser(String userId) {
 
-		User user = this.userRepo.findById(userId).orElseThrow(()-> new RuntimeException("ID is not found"));
+		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","userId",userId));
 		             this.userRepo.delete(user);	}
 
 	@Override
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto getUserById(String userId) {
 		
-		User user = this.userRepo.findById(userId).orElseThrow(() -> new RuntimeException("ID not found"));
+		User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User","userId",userId));
 	
 		return this.modelMapper.map(user, UserDto.class);
 	}
@@ -79,7 +80,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto getUserByEmail(String email) {
 
-		User user= userRepo.findByEmail(email).orElseThrow(()-> new RuntimeException("Email not found"));
+		User user= userRepo.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User","Useremail",email));
 		
 		return this.modelMapper.map(user,UserDto.class);
 		
