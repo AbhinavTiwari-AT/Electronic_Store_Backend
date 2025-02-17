@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.abhinav.electronic.Dto.UserDto;
@@ -61,9 +64,15 @@ public class UserServiceImpl implements UserService {
 		             this.userRepo.delete(user);	}
 
 	@Override
-	public List<UserDto> getAllUser() {
+	public List<UserDto> getAllUser(Integer pageNumber,Integer pageSize) {
+		
+		//int PageSize=5;
+		//int pageNumber=1;
 
-		List<User> users = this.userRepo.findAll();
+		Pageable p = PageRequest.of(pageNumber, pageSize);
+				
+        Page<User> userPage = this.userRepo.findAll(p);
+        List<User> users = userPage.getContent();
 	    List<UserDto> userDtos =users.stream().map(user -> this.modelMapper.map(user,UserDto.class)).collect(Collectors.toList());		
 		
 		return userDtos;

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.abhinav.electronic.Dto.ApiResponseMessage;
@@ -61,9 +62,16 @@ public class UserController {
 	
 	//get all
 	@GetMapping
-	public ResponseEntity<List<UserDto>>getAllUser()
+	public ResponseEntity<List<UserDto>>getAllUser
+	        (
+			@RequestParam(value = "pageNumber",defaultValue = "1",required = false)Integer pageNumber,
+			@RequestParam(value = "pageSize",defaultValue = "5",required = false) Integer pageSize
+			)
+	   
 	{
-		List<UserDto> getDto = this.userService.getAllUser();
+		pageNumber = pageNumber - 1;
+
+		List<UserDto> getDto = this.userService.getAllUser(pageNumber,pageSize);
 		return new ResponseEntity<>(getDto,HttpStatus.OK);
 		
 	}
