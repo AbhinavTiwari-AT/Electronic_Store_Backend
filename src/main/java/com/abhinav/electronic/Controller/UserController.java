@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.abhinav.electronic.Dto.ApiResponseMessage;
+import com.abhinav.electronic.Dto.PagebleResponse;
 import com.abhinav.electronic.Dto.UserDto;
 import com.abhinav.electronic.Service.UserService;
 
@@ -62,16 +63,18 @@ public class UserController {
 	
 	//get all
 	@GetMapping
-	public ResponseEntity<List<UserDto>>getAllUser
+	public ResponseEntity<PagebleResponse<UserDto>> getAllUser
 	        (
-			@RequestParam(value = "pageNumber",defaultValue = "1",required = false)Integer pageNumber,
-			@RequestParam(value = "pageSize",defaultValue = "5",required = false) Integer pageSize
+			@RequestParam(value = "pageNumber",defaultValue = "0",required = false)Integer pageNumber,
+			@RequestParam(value = "pageSize",defaultValue = "5",required = false) Integer pageSize,
+			@RequestParam(value = "sortBy",defaultValue = "name",required = false)String sortBy,
+			@RequestParam(value = "sortDir",defaultValue = "asc",required = false)String sortDir
 			)
 	   
 	{
-		pageNumber = pageNumber - 1;
+		// pageNumber = pageNumber - 1;
 
-		List<UserDto> getDto = this.userService.getAllUser(pageNumber,pageSize);
+		PagebleResponse<UserDto> getDto = this.userService.getAllUser(pageNumber,pageSize,sortBy,sortDir);
 		return new ResponseEntity<>(getDto,HttpStatus.OK);
 		
 	}

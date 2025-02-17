@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.abhinav.electronic.Dto.PagebleResponse;
 import com.abhinav.electronic.Dto.UserDto;
 import com.abhinav.electronic.Entities.User;
 import com.abhinav.electronic.Exception.ResourceNotFoundException;
+import com.abhinav.electronic.Helper.Helper;
 import com.abhinav.electronic.Repositories.UserRepo;
 import com.abhinav.electronic.Service.UserService;
 
@@ -61,21 +64,24 @@ public class UserServiceImpl implements UserService {
 	public void deleteUser(String userId) {
 
 		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","userId",userId));
-		             this.userRepo.delete(user);	}
+		             this.userRepo.delete(user);	
+		          
+	}
 
 	@Override
-	public List<UserDto> getAllUser(Integer pageNumber,Integer pageSize) {
+	public PagebleResponse<UserDto> getAllUser(Integer pageNumber,Integer pageSize,String sortBy, String sortDir) {
 		
 		//int PageSize=5;
 		//int pageNumber=1;
+		
+		Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
 
-		Pageable p = PageRequest.of(pageNumber, pageSize);
+		Pageable p = PageRequest.of(pageNumber, pageSize,sort);
 				
         Page<User> userPage = this.userRepo.findAll(p);
-        List<User> users = userPage.getContent();
-	    List<UserDto> userDtos =users.stream().map(user -> this.modelMapper.map(user,UserDto.class)).collect(Collectors.toList());		
-		
-		return userDtos;
+        PagebleResponse<UserDto> response  = Helper.getPagebleResponse(userPage,UserDto.class);
+	   
+		return response;
 	}
 
 	@Override

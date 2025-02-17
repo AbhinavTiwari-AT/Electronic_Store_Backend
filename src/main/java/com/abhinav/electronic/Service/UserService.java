@@ -2,6 +2,7 @@ package com.abhinav.electronic.Service;
 
 import java.util.List;
 
+import com.abhinav.electronic.Dto.PagebleResponse;
 import com.abhinav.electronic.Dto.UserDto;
 
 public interface UserService {
@@ -16,7 +17,7 @@ public interface UserService {
 	void deleteUser(String userId);
 	
 	//get all users
-	List<UserDto> getAllUser(Integer pageNumber,Integer pageSize);
+	PagebleResponse<UserDto> getAllUser(Integer pageNumber,Integer pageSize,String sortBy, String sortDir);
 	
 	//get single user by id
 	UserDto getUserById(String userId);
