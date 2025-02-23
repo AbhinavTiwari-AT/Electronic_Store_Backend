@@ -1,10 +1,18 @@
 package com.abhinav.electronic.Service.Impl;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.abhinav.electronic.Dto.CategoryDto;
 import com.abhinav.electronic.Dto.PagebleResponse;
 import com.abhinav.electronic.Entities.Category;
+import com.abhinav.electronic.Entities.User;
 import com.abhinav.electronic.Exception.ResourceNotFoundException;
 import com.abhinav.electronic.Helper.Helper;
 import com.abhinav.electronic.Repositories.CategoryRepo;
@@ -27,6 +36,12 @@ public class CategoryServiceImpl implements CategoryService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Value("${category.profile.image.path}")
+	private String imagePath;
+	
+	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
 
 	@Override
 	public CategoryDto createCategory(CategoryDto categoryDto) {
@@ -61,7 +76,33 @@ public class CategoryServiceImpl implements CategoryService {
 	public void delete(String categoryId) {
 		
       Category category	= this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category", "categoryId", categoryId));
-      categoryRepo.delete(category);
+      
+      
+		// DELETE USER PROFILE IMAGE
+		// image/user/abc.png
+	    String fullPath =	imagePath + category.getCoverImage();
+	    	    
+	    try {
+	    	
+		    Path path = Paths.get(fullPath);
+
+			Files.delete(path);
+		} 
+	    
+	    catch (NoSuchFileException ex) 
+	    {
+          logger.info("User image not found in folder");
+			ex.printStackTrace();
+
+		} catch (IOException e) {
+              
+			e.printStackTrace();
+		}
+	    
+		//DELETE USER
+		
+		this.categoryRepo.delete(category);	
+		          
 	}
 
 	@Override
