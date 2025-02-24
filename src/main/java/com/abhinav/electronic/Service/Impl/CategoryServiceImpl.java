@@ -78,7 +78,7 @@ public class CategoryServiceImpl implements CategoryService {
       Category category	= this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category", "categoryId", categoryId));
       
       
-		// DELETE USER PROFILE IMAGE
+		// DELETE Category PROFILE IMAGE
 		// image/user/abc.png
 	    String fullPath =	imagePath + category.getCoverImage();
 	    	    
@@ -91,7 +91,7 @@ public class CategoryServiceImpl implements CategoryService {
 	    
 	    catch (NoSuchFileException ex) 
 	    {
-          logger.info("User image not found in folder");
+          logger.info("Category image not found in folder");
 			ex.printStackTrace();
 
 		} catch (IOException e) {

@@ -40,5 +40,6 @@ public class Product {
 	private boolean stock;
 	
 	private int discountedPrice;
-
+	
+	private String productImageName;
 }
