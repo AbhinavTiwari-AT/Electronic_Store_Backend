@@ -1,6 +1,5 @@
 package com.abhinav.electronic.Service;
 
-import java.util.List;
 
 import com.abhinav.electronic.Dto.PagebleResponse;
 import com.abhinav.electronic.Dto.ProductDto;
@@ -29,9 +28,13 @@ public interface ProductService {
 	//search product
     PagebleResponse<ProductDto> searchByTitle(String subTitle,Integer pageNumber,Integer pageSize,String sortBy, String sortDir);
 	
-	//other method
+	//create product with category
+    ProductDto createProductwithCategory(ProductDto productDto, String categoryId);
     
-	
-	
-
+    
+    //update category of product
+    ProductDto updateCategory(String productId, String categoryId);
+    
+    PagebleResponse<ProductDto> getAllofCategory(String categoryId,int pageNumber,int pageSize,String sortBy,String sortDir);
+    
 }

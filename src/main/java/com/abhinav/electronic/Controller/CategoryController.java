@@ -26,8 +26,10 @@ import com.abhinav.electronic.Dto.ApiResponseMessage;
 import com.abhinav.electronic.Dto.CategoryDto;
 import com.abhinav.electronic.Dto.ImageResponse;
 import com.abhinav.electronic.Dto.PagebleResponse;
+import com.abhinav.electronic.Dto.ProductDto;
 import com.abhinav.electronic.Service.CategoryService;
 import com.abhinav.electronic.Service.FileService;
+import com.abhinav.electronic.Service.ProductService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -42,6 +44,9 @@ public class CategoryController
 	
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private ProductService productService;
 	
 	@Value("${category.profile.image.path}")
     private String imageUploadPath;
@@ -131,9 +136,49 @@ public class CategoryController
 			
 			response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 			
-		    StreamUtils.copy(resource,response.getOutputStream());
-			
+		    StreamUtils.copy(resource,response.getOutputStream());	
 			
 		}
+		
+       //create product with category
+		@PostMapping("/{categoryId}/products")
+	   public ResponseEntity<ProductDto> createProductwithCategory(
+			   @PathVariable("categoryId") String categoryId,
+			   @RequestBody ProductDto productDto
+			   )
+		{
+		 ProductDto productWithCategory  = this.productService.createProductwithCategory(productDto, categoryId);
+		 
+		 return new ResponseEntity<>(productWithCategory,HttpStatus.CREATED);
+		   
+	   }
+		
+		
+	//update category of product
+	@PutMapping("/{categoryId}/products/{productId}")
+	public ResponseEntity<ProductDto> updateProductwithCategory(
+			@PathVariable String categoryId,
+			@PathVariable String productId
+			)
+	{
+	 	ProductDto productDto= productService.updateCategory(productId, categoryId);
+		return new ResponseEntity<>(productDto,HttpStatus.OK);
+		
+	}
+	
+	//get products of categories
+	@GetMapping("/{categoryId}/products")
+	public ResponseEntity<PagebleResponse<ProductDto>> getProductsOfCategories(
+			@PathVariable String categoryId,
+			@RequestParam(value = "pageNumber",defaultValue = "0",required = false)int pageNumber,
+    		@RequestParam(value = "pageSize",defaultValue = "5",required = false)int pageSize,
+    		@RequestParam(value = "sortBy",defaultValue = "title",required = false)String sortBy,
+    		@RequestParam(value = "sortDir",defaultValue = "asc",required = false)String sortDir
+			)
+	{
+
+	 	PagebleResponse<ProductDto> response = productService.getAllofCategory(categoryId,pageNumber,pageSize,sortBy,sortDir);
+	 	return new ResponseEntity<>(response,HttpStatus.OK);
+	}
 
 }

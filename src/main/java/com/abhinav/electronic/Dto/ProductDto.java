@@ -2,6 +2,7 @@ package com.abhinav.electronic.Dto;
 
 import java.util.Date;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,9 @@ public class ProductDto {
 	private int discountedPrice;
 	
 	private String productImageName;
+	
+	private CategoryDto category;
+
 
 
 }
