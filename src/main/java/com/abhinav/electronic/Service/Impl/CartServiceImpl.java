@@ -44,7 +44,7 @@ public class CartServiceImpl implements CartService {
 	private CartItemRepo cartItemRepo;
 
 	@Override
-	public CartDto addItemTOCart(String userId, AddItemToCartRequest request) {
+	public CartDto addItemToCart(String userId, AddItemToCartRequest request) {
 
 		int quantity = request.getQuantity();
 		String productId = request.getProductId();
@@ -84,7 +84,7 @@ public class CartServiceImpl implements CartService {
 	    		
 	    		//item already present	
 	    		item.setQuantity(quantity);
-	    		item.setTotalPrice(quantity*product.getPrice());
+	    		item.setTotalPrice(quantity*product.getDiscountedPrice());
 	    		updated.set(true);
 			}
 	    	return item;
@@ -94,7 +94,7 @@ public class CartServiceImpl implements CartService {
 		
 		//create items
 	   if (!updated.get()) {
-		   CartItem cartItem = CartItem.builder().quantity(quantity).totalPrice(quantity*product.getPrice())
+		   CartItem cartItem = CartItem.builder().quantity(quantity).totalPrice(quantity*product.getDiscountedPrice())
 		             .cart(cart)
 		             .product(product)
 		             .build();
