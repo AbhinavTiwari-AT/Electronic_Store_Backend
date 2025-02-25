@@ -1,8 +1,6 @@
 package com.abhinav.electronic.Dto;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,36 +9,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @ToString
-public class OrderDto {
+public class CreateOrderRequest {
 	
-
-	private String orderId;
+	
+	private String cartId;
+	
+	private String userId;
 	
 	private String orderStatus= "PENDING";
 	
 	private String paymentStatus = "NOTPAID";
-	
-	private int orderAmount;
 	
 	private  String billingName;
 	
 	private String billingAddress;
 	
 	private String billingPhone;
+			
 	
-	private Date orderedDate = new Date();
-	
-	private Date deliveredDate;
-	
-	//private UserDto user;
-	
-	private List<OrderItemDto> orderItems = new ArrayList<>();
 
 }

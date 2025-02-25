@@ -14,10 +14,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Getter
+@Setter
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -26,12 +32,14 @@ public class Order {
 	private String orderId;
 	
 	//PENDING,DELIVERED,DISPATCHED
-	private String orderStatu;
+	private String orderStatus;
 	
 	//NOTPAID,PAID
 	//enum
 	//boolean false=> Not paid || true => paid
-	private String paymentStatu;
+	private String paymentStatus;
+	
+	private  String billingName;
 	
 	private int orderAmount;
 	
@@ -52,5 +60,7 @@ public class Order {
 	//
 	@OneToMany(mappedBy = "order",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private List<OrderItem> orderItems = new ArrayList<>();
+
+	
 }
  
