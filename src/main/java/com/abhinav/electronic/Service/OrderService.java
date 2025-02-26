@@ -5,6 +5,7 @@ import java.util.List;
 import com.abhinav.electronic.Dto.CreateOrderRequest;
 import com.abhinav.electronic.Dto.OrderDto;
 import com.abhinav.electronic.Dto.PagebleResponse;
+import com.abhinav.electronic.Dto.UpdateOrderRequestDto;
 
 public interface OrderService 
 {
@@ -22,5 +23,6 @@ public interface OrderService
 	
 	//other methods(Logic) related to Order
 	
+	OrderDto updateOrder(String orderId, UpdateOrderRequestDto updateRequest);
 	
 }

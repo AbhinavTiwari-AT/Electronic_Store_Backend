@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.abhinav.electronic.Dto.CreateOrderRequest;
 import com.abhinav.electronic.Dto.OrderDto;
 import com.abhinav.electronic.Dto.PagebleResponse;
+import com.abhinav.electronic.Dto.UpdateOrderRequestDto;
 import com.abhinav.electronic.Entities.Cart;
 import com.abhinav.electronic.Entities.CartItem;
 import com.abhinav.electronic.Entities.Order;
@@ -81,6 +82,11 @@ public class OrderServiceImpl implements OrderService {
 		AtomicReference<Integer> orderAmount = new AtomicReference<>(0);
 		List<OrderItem> orderItems = cartItems.stream().map(cartItem -> {
 			
+		    int totalPrice = cartItem.getQuantity() * cartItem.getProduct().getDiscountedPrice();
+
+		    orderAmount.updateAndGet(amount -> amount + totalPrice);
+
+			
 			//	CartItem -> OrderItem
 			OrderItem orderItem = OrderItem.builder()
 			          .quantity(cartItem.getQuantity())
@@ -131,6 +137,32 @@ public class OrderServiceImpl implements OrderService {
         Page<Order> page= this.orderRepo.findAll(pagable);
 		return Helper.getPagebleResponse(page,OrderDto.class);
 	}
+
+
+	@Override
+	public OrderDto updateOrder(String orderId, UpdateOrderRequestDto updateRequest) {
+		    
+		    // Fetch order from DB
+		    Order order = orderRepo.findById(orderId)
+		            .orElseThrow(() -> new ResourceNotFoundException("Order", "orderId", orderId));
+
+		    // Update order details
+		    order.setOrderStatus(updateRequest.getOrderStatus());
+		    order.setPaymentStatus(updateRequest.getPaymentStatus());
+
+		    // Automatically set deliveredDate if orderStatus is "DELIVERED"
+		    if ("DELIVERED".equalsIgnoreCase(updateRequest.getOrderStatus())) {
+		        order.setDeliveredDate(new Date()); // Set current date/time
+		    } else {
+		        order.setDeliveredDate(null); // Keep it null if delivery is not completed
+		    }
+
+		    // Save updated order
+		    Order updatedOrder = orderRepo.save(order);
+		    
+		    return modelMapper.map(updatedOrder, OrderDto.class);
+		}
+
 	
 	
 
