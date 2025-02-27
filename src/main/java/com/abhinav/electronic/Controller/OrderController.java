@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ public class OrderController {
 	private OrderRepo orderRepo;
 	
 	//create
+	@PreAuthorize("hasAnyRole('NORMAL','ADMIN')")
 	@PostMapping
 	public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody CreateOrderRequest request)
 	{
@@ -45,6 +47,7 @@ public class OrderController {
 	}
 	
 	//remove order
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{orderId}")
 	public ResponseEntity<ApiResponseMessage> removeOrder(@PathVariable String orderId)
 	{
@@ -60,6 +63,7 @@ public class OrderController {
 	}
 	
 	//get orders of the user
+	@PreAuthorize("hasAnyRole('NORMAL','ADMIN')")
 	@GetMapping("/users/{userId}")
 	public ResponseEntity<List<OrderDto>> getOrdersOfUser(@PathVariable String userId)
 	{
@@ -67,6 +71,8 @@ public class OrderController {
 		return new ResponseEntity<>(orderDtos,HttpStatus.OK);
 	}
 	
+	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping
 	public ResponseEntity<PagebleResponse<OrderDto>> getOrders(
 			@RequestParam(value = "pageNumber",defaultValue = "0",required = false)int pageNumber,
@@ -81,6 +87,7 @@ public class OrderController {
 	}
 	
 	//update order from vendores or admin side
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{orderId}")
 	public  ResponseEntity<OrderDto> updateOrderStatus(@PathVariable String orderId,@RequestBody UpdateOrderRequestDto updateOrderRequestDto) {
 		 
