@@ -18,13 +18,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.abhinav.electronic.Dto.PagebleResponse;
 import com.abhinav.electronic.Dto.UserDto;
+import com.abhinav.electronic.Entities.Role;
 import com.abhinav.electronic.Entities.User;
 import com.abhinav.electronic.Exception.ResourceNotFoundException;
 import com.abhinav.electronic.Helper.Helper;
+import com.abhinav.electronic.Repositories.RoleRepo;
 import com.abhinav.electronic.Repositories.UserRepo;
 import com.abhinav.electronic.Service.UserService;
 
@@ -43,6 +46,12 @@ public class UserServiceImpl implements UserService {
 	
 	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private RoleRepo roleRepo;
+	
 	@Override
 	public UserDto createUser(UserDto userDto) {
 		
@@ -51,8 +60,18 @@ public class UserServiceImpl implements UserService {
 	    String userID	= UUID.randomUUID().toString();
 	                      userDto.setUserId(userID);
 	    
-		
+		// dto-> entity
 		User user = this.modelMapper.map(userDto , User.class);
+		
+		//password encoded
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		
+		//get the normal role
+		Role role = new Role();
+		role.setRoleId(UUID.randomUUID().toString());
+		Role roleNormal = roleRepo.findByName("ROLE_NORMAL").orElse(role);
+		user.setRoles(List.of(roleNormal));
+		
 		User createUser = this.userRepo.save(user);
 		return this.modelMapper.map(createUser,UserDto.class);
 	}
@@ -65,8 +84,12 @@ public class UserServiceImpl implements UserService {
          user.setAbout(userDto.getAbout());
          user.setGender(userDto.getGender());
      //  user.setEmail(userDto.getEmail());
-         user.setPassword(userDto.getPassword());
+         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
          user.setImageName(userDto.getImageName());
+         
+         //assign normal role to user
+         //by default jo bhi api se user banega usko humlog normal user banyen ge
+         
          
        User updatedUser = this.userRepo.save(user);
         

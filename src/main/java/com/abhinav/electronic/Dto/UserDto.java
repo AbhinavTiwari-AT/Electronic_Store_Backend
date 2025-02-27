@@ -1,5 +1,8 @@
 package com.abhinav.electronic.Dto;
 
+import java.util.List;
+
+import com.abhinav.electronic.Entities.Role;
 import com.abhinav.electronic.Validate.ImageNameValid;
 
 import jakarta.validation.constraints.Email;
@@ -43,5 +46,8 @@ public class UserDto {
 	
     @ImageNameValid
 	private String imageName;
+    
+    //creating to set role 
+    private List<RoleDto> roles;
 
 }
