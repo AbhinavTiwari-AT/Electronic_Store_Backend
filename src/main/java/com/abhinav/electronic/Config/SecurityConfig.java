@@ -47,7 +47,7 @@ public class SecurityConfig {
    		         
 				);
 		
-		//kis type ki security:
+		//kis type ki security: basic with default configuration 
 		security.httpBasic(Customizer.withDefaults());
 		
 		return security.build();
