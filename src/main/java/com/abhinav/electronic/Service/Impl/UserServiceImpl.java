@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.abhinav.electronic.Config.AppConstants;
 import com.abhinav.electronic.Dto.PagebleResponse;
 import com.abhinav.electronic.Dto.UserDto;
 import com.abhinav.electronic.Entities.Role;
@@ -69,7 +70,9 @@ public class UserServiceImpl implements UserService {
 		//get the normal role
 		Role role = new Role();
 		role.setRoleId(UUID.randomUUID().toString());
-		Role roleNormal = roleRepo.findByName("ROLE_NORMAL").orElse(role);
+		role.setName("ROLE_"+ AppConstants.ROLE_NORMAL);
+		
+		Role roleNormal = roleRepo.findByName("ROLE_"+ AppConstants.ROLE_NORMAL).orElse(role);
 		user.setRoles(List.of(roleNormal));
 		
 		User createUser = this.userRepo.save(user);

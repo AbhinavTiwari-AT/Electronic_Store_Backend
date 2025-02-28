@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.abhinav.electronic.Config.AppConstants;
 import com.abhinav.electronic.Dto.ApiResponseMessage;
 import com.abhinav.electronic.Dto.CreateOrderRequest;
 import com.abhinav.electronic.Dto.OrderDto;
@@ -37,7 +38,7 @@ public class OrderController {
 	private OrderRepo orderRepo;
 	
 	//create
-	@PreAuthorize("hasAnyRole('NORMAL','ADMIN')")
+	@PreAuthorize("hasAnyRole('"+AppConstants.ROLE_ADMIN+"','"+AppConstants.ROLE_NORMAL+"')")
 	@PostMapping
 	public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody CreateOrderRequest request)
 	{
@@ -47,7 +48,7 @@ public class OrderController {
 	}
 	
 	//remove order
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('"+AppConstants.ROLE_ADMIN+"')")
 	@DeleteMapping("/{orderId}")
 	public ResponseEntity<ApiResponseMessage> removeOrder(@PathVariable String orderId)
 	{
@@ -63,7 +64,7 @@ public class OrderController {
 	}
 	
 	//get orders of the user
-	@PreAuthorize("hasAnyRole('NORMAL','ADMIN')")
+	@PreAuthorize("hasAnyRole('"+AppConstants.ROLE_ADMIN+"','"+AppConstants.ROLE_NORMAL+"')")
 	@GetMapping("/users/{userId}")
 	public ResponseEntity<List<OrderDto>> getOrdersOfUser(@PathVariable String userId)
 	{
@@ -72,7 +73,7 @@ public class OrderController {
 	}
 	
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('"+AppConstants.ROLE_ADMIN+"')")
 	@GetMapping
 	public ResponseEntity<PagebleResponse<OrderDto>> getOrders(
 			@RequestParam(value = "pageNumber",defaultValue = "0",required = false)int pageNumber,
@@ -87,7 +88,7 @@ public class OrderController {
 	}
 	
 	//update order from vendores or admin side
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('"+AppConstants.ROLE_ADMIN+"')")
 	@PutMapping("/{orderId}")
 	public  ResponseEntity<OrderDto> updateOrderStatus(@PathVariable String orderId,@RequestBody UpdateOrderRequestDto updateOrderRequestDto) {
 		 

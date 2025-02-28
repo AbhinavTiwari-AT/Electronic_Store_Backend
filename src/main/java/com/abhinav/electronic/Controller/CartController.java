@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.abhinav.electronic.Config.AppConstants;
 import com.abhinav.electronic.Dto.AddItemToCartRequest;
 import com.abhinav.electronic.Dto.ApiResponseMessage;
 import com.abhinav.electronic.Dto.CartDto;
@@ -25,7 +26,7 @@ public class CartController {
 	private CartService cartService;
 	
 	//add items to cart
-	@PreAuthorize("hasAnyRole('ADMIN','NORMAL')")
+	@PreAuthorize("hasAnyRole('"+AppConstants.ROLE_ADMIN+"','"+AppConstants.ROLE_NORMAL+"')")
 	@PostMapping("/{userId}")
 	public ResponseEntity<CartDto> addItemToCart(@PathVariable String userId, @RequestBody AddItemToCartRequest request) {
 		CartDto cartDto  = cartService.addItemToCart(userId,request);
@@ -34,7 +35,7 @@ public class CartController {
 	
 	
 	//remove items from cart
-	@PreAuthorize("hasAnyRole('ADMIN','NORMAL')")
+	@PreAuthorize("hasAnyRole('"+AppConstants.ROLE_ADMIN+"','"+AppConstants.ROLE_NORMAL+"')")
 	@DeleteMapping("/{userId}/items/{itemId}")
 	public ResponseEntity<ApiResponseMessage> removeItemFromCart(@PathVariable String userId,@PathVariable int itemId){
 		
@@ -44,7 +45,7 @@ public class CartController {
 	}
 
 	//clear cart data
-	@PreAuthorize("hasAnyRole('ADMIN','NORMAL')")
+	@PreAuthorize("hasAnyRole('"+AppConstants.ROLE_ADMIN+"','"+AppConstants.ROLE_NORMAL+"')")
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ApiResponseMessage> clearCart(@PathVariable String userId){
 		
@@ -54,7 +55,7 @@ public class CartController {
 	}
 	
 	//get cart
-	@PreAuthorize("hasAnyRole('ADMIN','NORMAL')")
+	@PreAuthorize("hasAnyRole('"+AppConstants.ROLE_ADMIN+"','"+AppConstants.ROLE_NORMAL+"')")
 	@GetMapping("/{userId}")
 	public ResponseEntity<CartDto> getCart(@PathVariable String userId) {
 	   CartDto cartDto  = cartService.getCartByUser(userId);
