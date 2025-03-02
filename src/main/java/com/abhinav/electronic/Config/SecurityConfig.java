@@ -2,6 +2,7 @@ package com.abhinav.electronic.Config;
 
 
 import java.security.PublicKey;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.abhinav.electronic.Security.JwtAuthenticationEntryPoint;
 import com.abhinav.electronic.Security.JwtAuthenticationFilter;
@@ -36,11 +40,11 @@ public class SecurityConfig {
 	
 	private final String[] PUBLIC_URLS = {
 	    
-			"/swagger-ui/**",
-			"/webjars/**",
-			"/swagger-resources/**",
-			"/v3/api-docs",
-			
+			    "/swagger-ui/**",
+		        "/swagger-ui.html",
+		        "/v3/api-docs/**",
+		        "/swagger-resources/**",
+		        "/webjars/**"
     };
 	
 	
@@ -54,8 +58,7 @@ public class SecurityConfig {
 		//koan sa urls admin, koun se normal hai
 		
 		//cors ko abhi humne disable kiya hai
-		security.cors(httpSecurityCorsConfiguration -> httpSecurityCorsConfiguration.disable());
-		
+		security .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 		//csrf ka home abhi ke liye disable kiya hai
 		security.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 		
@@ -95,6 +98,18 @@ public class SecurityConfig {
 		
 	}
 	
+	 @Bean
+	    public CorsConfigurationSource corsConfigurationSource() {
+	        CorsConfiguration configuration = new CorsConfiguration();
+	        configuration.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:4200")); // Allow Swagger & Frontend
+	        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+	        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+	        configuration.setAllowCredentials(true);
+
+	        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	        source.registerCorsConfiguration("/**", configuration);
+	        return source;
+	    }
 	// password encoder
 	@Bean
 	public PasswordEncoder passwordEncoder() {
