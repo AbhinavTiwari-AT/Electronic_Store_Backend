@@ -31,11 +31,13 @@ import com.abhinav.electronic.Service.CategoryService;
 import com.abhinav.electronic.Service.FileService;
 import com.abhinav.electronic.Service.ProductService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/categories")
+@Tag(name = "CategoryController", description = "Controller for managing category of Products")
 public class CategoryController 
 {
 	

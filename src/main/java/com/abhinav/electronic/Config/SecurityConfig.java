@@ -1,6 +1,8 @@
 package com.abhinav.electronic.Config;
 
 
+import java.security.PublicKey;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,11 +34,20 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationEntryPoint entryPoint;
 	
+	private final String[] PUBLIC_URLS = {
+	    
+			"/swagger-ui/**",
+			"/webjars/**",
+			"/swagger-resources/**",
+			"/v3/api-docs",
+			
+    };
+	
 	
 	// security filter chain beans
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-		
+	
 		//configuration
 		//urls 
 		//public and producted
@@ -57,10 +68,12 @@ public class SecurityConfig {
 		                .requestMatchers("/products/**").hasRole(AppConstants.ROLE_ADMIN)
 		                .requestMatchers(HttpMethod.GET,"/users/**").permitAll()
 		                .requestMatchers(HttpMethod.POST,"/users").permitAll()
+		                .requestMatchers(PUBLIC_URLS).permitAll()
    		                .requestMatchers(HttpMethod.GET,"/categories/**").permitAll()
    		                .requestMatchers("/categories/**").hasRole(AppConstants.ROLE_ADMIN)
    		                .requestMatchers(HttpMethod.POST,"/auth/generate-token").permitAll()
-   		                .requestMatchers("/auth/**").authenticated()
+   		                .requestMatchers("/auth/**")
+   		                .authenticated()
    		                .anyRequest().permitAll()
    		         
 				);

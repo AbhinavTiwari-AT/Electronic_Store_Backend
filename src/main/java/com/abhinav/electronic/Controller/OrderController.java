@@ -25,10 +25,12 @@ import com.abhinav.electronic.Dto.UpdateOrderRequestDto;
 import com.abhinav.electronic.Repositories.OrderRepo;
 import com.abhinav.electronic.Service.OrderService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/orders")
+@Tag(name = "OrderController", description = "Controller for managing orders of users")
 public class OrderController {
 
 	@Autowired

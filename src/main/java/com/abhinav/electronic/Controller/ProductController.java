@@ -32,10 +32,12 @@ import com.abhinav.electronic.Dto.ProductDto;
 import com.abhinav.electronic.Service.FileService;
 import com.abhinav.electronic.Service.ProductService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/products")
+@Tag(name = "ProductController", description = "Controller for managing products")
 public class ProductController {
 	
 	@Autowired

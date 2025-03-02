@@ -21,8 +21,11 @@ import com.abhinav.electronic.Dto.UserDto;
 import com.abhinav.electronic.Entities.User;
 import com.abhinav.electronic.Security.JwtHelper;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "AuthenticationController", description = "Controller for mannaging the Authentication requests")
 public class AuthenticationController {
 	
 	//method to generate token;

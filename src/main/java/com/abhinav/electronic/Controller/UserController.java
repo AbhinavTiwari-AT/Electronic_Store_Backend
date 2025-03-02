@@ -32,11 +32,14 @@ import com.abhinav.electronic.Service.FileService;
 import com.abhinav.electronic.Service.UserService;
 import com.abhinav.electronic.Service.Impl.FileServiceImpl;
 
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
+@Tag(name = "UserController", description = "Controller for managing users")
 public class UserController {
 	
 	@Autowired

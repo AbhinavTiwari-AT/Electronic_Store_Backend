@@ -18,8 +18,11 @@ import com.abhinav.electronic.Dto.ApiResponseMessage;
 import com.abhinav.electronic.Dto.CartDto;
 import com.abhinav.electronic.Service.CartService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/carts")
+@Tag(name = "CartController", description = "Controller for managing Cart of users")
 public class CartController {
 	
 	@Autowired
